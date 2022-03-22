@@ -5,8 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import comm.Sesion;
 import events.OnMessageReceived;
+import model.Message;
 
 public class Main implements OnMessageReceived{
 	
@@ -115,6 +118,17 @@ public class Main implements OnMessageReceived{
 	}
 	
 	public void startGame(Sesion sesionA,Sesion sesionB) {
+		
+		Message msg = new Message("sendPlayer");
+		
+		Gson gson = new Gson();
+		
+		String message = gson.toJson(msg);
+		
+		sesionA.sendMessage(message);
+		
+		sesionB.sendMessage(message);
+		
 		
 		
 	}

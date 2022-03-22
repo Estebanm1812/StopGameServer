@@ -9,10 +9,10 @@ import java.net.Socket;
 import java.util.UUID;
 
 import events.OnMessageReceived;
-import events.OnSendPlayer;
+
 import main.Main;
 
-public class Sesion extends Thread implements OnSendPlayer{
+public class Sesion extends Thread{
 
 	private Socket socket;
 	
@@ -131,16 +131,7 @@ public class Sesion extends Thread implements OnSendPlayer{
 		this.onGame = onGame;
 	}
 
-	@Override
-	public void sendPlayer() {
 	
-		
-		String message = "SendPlayer";
-		
-		
-		
-		//return null;
-	}
 
 
 }
