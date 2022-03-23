@@ -47,6 +47,10 @@ public class Main implements OnMessageReceived{
 					
 					Sesion session = new Sesion(socket,app);
 					
+					if(session==null) {
+						System.out.println("la sesion es nula");
+					}
+					
 					session.setReceived(app);
 					
 					
@@ -71,16 +75,20 @@ public class Main implements OnMessageReceived{
 		System.out.println("Entro");
 		
 		new Thread(() -> {
-
+				
+			System.out.println("En este momento hay: " + sessions.size() + " jugadores");
 			if(sessions.size()%2==0) {
 				
 				Sesion sesionA = null;
 				
 				Sesion sesionB = null;
 				
-				for(int i=0; i < sessions.size();i++) {
+				//System.out.println("Va a entrar al for");
+				
+				for(int i=0; i < sessions.size() && sesionA==null;i++) {
 					
 					Sesion tmp = sessions.get(i);
+					
 					
 					if(tmp.isOnGame()==false) {
 						
@@ -92,24 +100,31 @@ public class Main implements OnMessageReceived{
 					
 				}
 				
-				for(int i=0; i < sessions.size();i++) {
+				
+				//System.out.println("Va a entrar al segundo for");
+				
+				for(int i=0; i < sessions.size() && sesionB==null;i++) {
 					
 					Sesion tmp = sessions.get(i);
+					
 					
 					if(tmp.isOnGame()==false) {
 						
 						sesionB = tmp;
 						sesionB.setOnGame(true);
 						
+						
 					}
 					
 					
-					
-					
+				
 				}
+				
+
 				if(sesionA!=null && sesionB!=null) {
 					
 					
+					startGame(sesionA,sesionB);
 					
 					
 				}
