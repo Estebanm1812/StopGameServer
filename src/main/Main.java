@@ -167,6 +167,24 @@ public class Main implements OnMessageReceived{
 		sesionA.sendMessage(playerB+"//"+c);
 		
 		sesionB.sendMessage(playerA+"//"+c);
+		
+		new Thread(() -> {
+			
+		String a = sesionA.readMessage();
+		
+		sesionB.sendMessage(a);
+			
+		}).start();
+		
+		new Thread(() -> {
+			
+		String b = sesionB.readMessage();
+		
+		sesionA.sendMessage(b);
+			
+		}).start();
+		
+		
 	}
 
 	@Override
