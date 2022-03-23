@@ -124,7 +124,7 @@ public class Sesion extends Thread{
 		String msgfinal = " ";
 		try {
 			String msg = br.readLine();
-			System.out.println(msg);
+			//System.out.println(msg);
 			if(msg == null) {
 				//Sacar la sesion del arreglo
 				

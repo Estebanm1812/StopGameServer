@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.google.gson.Gson;
 
@@ -144,7 +145,7 @@ public class Main implements OnMessageReceived{
 		
 		String message = gson.toJson(msg);
 		
-		System.out.print("SendPlayer");
+		//System.out.print("SendPlayer");
 		
 		sesionA.sendMessage(message);
 		
@@ -154,10 +155,18 @@ public class Main implements OnMessageReceived{
 		
 		String playerB = sesionB.readMessage();
 		
-		System.out.println(playerA);
+		Random r = new Random();
+		char c = (char)(r.nextInt(26) + 'a');
 		
-		System.out.println(playerB);
+		System.out.println(c);
 		
+		//System.out.println(playerA);
+		
+		//System.out.println(playerB);
+		
+		sesionA.sendMessage(playerB+"//"+c);
+		
+		sesionB.sendMessage(playerA+"//"+c);
 	}
 
 	@Override
