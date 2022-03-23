@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import comm.Sesion;
 import events.OnMessageReceived;
+import model.Generic;
 import model.Message;
 
 public class Main implements OnMessageReceived{
@@ -53,6 +54,7 @@ public class Main implements OnMessageReceived{
 					
 					sessions.add(session);
 					
+					createGame();
 					
 				}
 				
@@ -65,6 +67,8 @@ public class Main implements OnMessageReceived{
 	}
 	
 	public void createGame() {
+		
+		System.out.println("Entro");
 		
 		new Thread(() -> {
 
@@ -125,10 +129,27 @@ public class Main implements OnMessageReceived{
 		
 		String message = gson.toJson(msg);
 		
+		System.out.print("SendPlayer");
+		
 		sesionA.sendMessage(message);
+		
+		String playerA = sesionA.readMessage();
 		
 		sesionB.sendMessage(message);
 		
+		String playerB = sesionB.readMessage();
+		
+		System.out.println(playerA);
+		
+		System.out.println(playerB);
+		
+	}
+
+	@Override
+	public String messageReceived(String msg, Sesion sessions) {
+		
+		
+		return msg;
 		
 		
 	}

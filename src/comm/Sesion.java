@@ -37,6 +37,8 @@ public class Sesion extends Thread{
 		
 		this.main = main;
 		
+		setReceived(main);
+		
 		onGame = false;
 		//main.setReceivd(this);
 	}
@@ -49,22 +51,8 @@ public class Sesion extends Thread{
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			//received.onOpen(this);
-			while(true) {
 				
-				String msg = br.readLine();
-				System.out.println(msg);
-				if(msg == null) {
-					//Sacar la sesion del arreglo
-					
-					//received.onClose(this);
-					
-					break;
-				}else {
 				
-				//received.messageReceived(msg,this);
-				
-				}
-			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -130,7 +118,35 @@ public class Sesion extends Thread{
 	public void setOnGame(boolean onGame) {
 		this.onGame = onGame;
 	}
+	
+	public String readMessage() {
+		
+		String msgfinal = " ";
+		try {
+			String msg = br.readLine();
+			System.out.println(msg);
+			if(msg == null) {
+				//Sacar la sesion del arreglo
+				
+				//received.onClose(this);
+				
 
+			}else {
+				
+			msgfinal = received.messageReceived(msg,this);
+			
+			
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return msgfinal;
+		
+	
+	}
+	
 	
 
 
