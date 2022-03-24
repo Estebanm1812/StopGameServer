@@ -9,11 +9,12 @@ import java.util.Random;
 import com.google.gson.Gson;
 
 import comm.Sesion;
+import events.OnClose;
 import events.OnMessageReceived;
 import model.Generic;
 import model.Message;
 
-public class Main implements OnMessageReceived{
+public class Main implements OnMessageReceived, OnClose{
 	
 	static Main app;
 	
@@ -213,6 +214,8 @@ public class Main implements OnMessageReceived{
 			}).start();
 				
 			}).start();
+	sesionA.setOnGame(false);
+	sesionB.setOnGame(false);
 		
 		
 	}
@@ -226,6 +229,15 @@ public class Main implements OnMessageReceived{
 		
 	}
 			
+	public void removeFromSessions() {
 		
+	}
+
+	@Override
+	public void OnSesionClosed(Sesion sesion) {
+		
+		sessions.remove(sesion);
+		
+	}	
 	
 }

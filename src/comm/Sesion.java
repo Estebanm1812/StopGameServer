@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.UUID;
 
+import events.OnClose;
 import events.OnMessageReceived;
 
 import main.Main;
@@ -25,6 +26,8 @@ public class Sesion extends Thread{
 	private Main main;
 	
 	private boolean onGame;
+	
+	private OnClose close;
 	
 	private OnMessageReceived received;
 	//private OnMessageSend send;
@@ -126,7 +129,11 @@ public class Sesion extends Thread{
 			String msg = br.readLine();
 			System.out.println(msg);
 			 while(msg==null || msg.isEmpty() ) {
-
+				 
+				 if(msg==null) {
+					 
+					 close.OnSesionClosed(this);
+				 }
                  System.out.println("Espera en el readLine");
                  msg = br.readLine();
 
@@ -142,6 +149,10 @@ public class Sesion extends Thread{
 			}
 		return msgfinal;
 		}
+
+	public void setClose(OnClose close) {
+		this.close = close;
+	}
 		
 		
 		
