@@ -168,11 +168,17 @@ public class Main implements OnMessageReceived{
 		
 		sesionB.sendMessage(playerA+"//"+c);
 		
+		
+		
 		new Thread(() -> {
 			
 		String a = sesionA.readMessage();
 		
+		
+		System.out.println("Envio mensaje");
+		
 		sesionB.sendMessage(a);
+		
 			
 		}).start();
 		
@@ -180,6 +186,7 @@ public class Main implements OnMessageReceived{
 			
 		String b = sesionB.readMessage();
 		
+		System.out.println("Envio mensaje");
 		sesionA.sendMessage(b);
 			
 		}).start();

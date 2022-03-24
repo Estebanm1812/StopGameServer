@@ -87,7 +87,7 @@ public class Sesion extends Thread{
 				//send.messageSend(line);
 				bw.write(line + "\n");
 				
-				// System.out.println(line);
+				System.out.println(line);
 				bw.flush();
 	
 			} catch (IOException e) {
@@ -125,27 +125,27 @@ public class Sesion extends Thread{
 		try {
 			String msg = br.readLine();
 			System.out.println(msg);
-			if(msg == null) {
-				//Sacar la sesion del arreglo
-				
-				//received.onClose(this);
-				
+			 while(msg==null || msg.isEmpty() ) {
 
-			}else {
-				
+                 System.out.println("Espera en el readLine");
+                 msg = br.readLine();
+
+                 //windows0.msgMain=msg;
+
+
+             }
 			msgfinal = received.messageReceived(msg,this);
-			
-			
-			}
-		} catch (IOException e) {
+			} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			}
+		return msgfinal;
 		}
 		
-		return msgfinal;
+		
 		
 	
-	}
 	
 	
 
