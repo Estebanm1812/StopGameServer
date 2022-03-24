@@ -8,10 +8,15 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+
+import model.Message;
 import events.OnClose;
+import events.OnGameEnded;
 import events.OnMessageReceived;
 
 import main.Main;
+import model.Generic;
 
 public class Sesion extends Thread{
 
@@ -28,6 +33,8 @@ public class Sesion extends Thread{
 	private boolean onGame;
 	
 	private OnClose close;
+	
+	private OnGameEnded ended;
 	
 	private OnMessageReceived received;
 	//private OnMessageSend send;
@@ -127,12 +134,45 @@ public class Sesion extends Thread{
 		String msgfinal = " ";
 		try {
 			String msg = br.readLine();
+			Gson gson = new Gson();
+			
+			
+			 
+			 
+			
 			System.out.println(msg);
+			if(msg.equals("{\"type\":\"Message\",\"message\":\"gameEnded\"}")) {
+			
+				 ended.gameEnded(this);
+				
+			}
 			 while(msg==null || msg.isEmpty() ) {
 				 
 				 if(msg==null) {
 					 
 					 close.OnSesionClosed(this);
+				 }else{
+					 
+					 Generic generic = gson.fromJson(msg, Generic.class);
+					 System.out.println("Entro al else");
+					 
+					 switch(generic.type) {
+					 
+					 case "Message":
+						 
+						 System.out.println("Entro al caso correcto");
+						 Message m = gson.fromJson(msg, Message.class);
+						 
+						 String msg2 = m.getMessageText();
+						 if(msg2.equals("gameEnded")) {
+							 
+							 ended.gameEnded(this);
+							 
+						 }
+					break;	 
+					 
+					 }
+					 
 				 }
                  System.out.println("Espera en el readLine");
                  msg = br.readLine();
@@ -152,6 +192,14 @@ public class Sesion extends Thread{
 
 	public synchronized void setClose(OnClose close) {
 		this.close = close;
+	}
+
+	public OnGameEnded getEnded() {
+		return ended;
+	}
+
+	public void setEnded(OnGameEnded ended) {
+		this.ended = ended;
 	}
 		
 		

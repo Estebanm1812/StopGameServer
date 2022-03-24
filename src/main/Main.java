@@ -10,11 +10,12 @@ import com.google.gson.Gson;
 
 import comm.Sesion;
 import events.OnClose;
+import events.OnGameEnded;
 import events.OnMessageReceived;
 import model.Generic;
 import model.Message;
 
-public class Main implements OnMessageReceived, OnClose{
+public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 	
 	static Main app;
 	
@@ -54,7 +55,7 @@ public class Main implements OnMessageReceived, OnClose{
 					}
 					
 					session.setReceived(app);
-					
+					session.setEnded(this);
 					
 					session.start();	
 					
@@ -214,6 +215,8 @@ public class Main implements OnMessageReceived, OnClose{
 			sesionA.sendMessage(b);
 				
 			}).start();
+		
+		sesionA.readMessage();
 			
 		}).start();
 		
@@ -237,13 +240,15 @@ public class Main implements OnMessageReceived, OnClose{
 				
 					
 			}).start();
+		sesionB.readMessage();	
 				
 			}).start();
-	//sesionA.setOnGame(false);
-	//sesionB.setOnGame(false);
+		
 		
 		
 	}
+		
+	
 
 	@Override
 	public String messageReceived(String msg, Sesion sessions) {
@@ -262,6 +267,28 @@ public class Main implements OnMessageReceived, OnClose{
 	public void OnSesionClosed(Sesion sesion) {
 		
 		sessions.remove(sesion);
+		
+	}
+
+	@Override
+	public void gameEnded(Sesion sesion) {
+		
+		boolean out = false;
+		
+		for(int i=0; i < sessions.size() && out == false;i++) {
+			
+			if(sessions.get(i).equals(sesion)) {
+			
+				//sessions.get(i).setOnGame(false);
+				sessions.remove(i);
+				out = true;
+				System.out.println("Cambio de estado, ahora es: " + sessions.get(i).isOnGame() );
+				
+			}
+			
+		}
+		createGame();
+		
 		
 	}	
 	
