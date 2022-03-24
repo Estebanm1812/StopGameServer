@@ -150,7 +150,7 @@ public class Sesion extends Thread{
 		return msgfinal;
 		}
 
-	public void setClose(OnClose close) {
+	public synchronized void setClose(OnClose close) {
 		this.close = close;
 	}
 		
