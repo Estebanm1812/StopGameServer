@@ -175,21 +175,44 @@ public class Main implements OnMessageReceived{
 		String a = sesionA.readMessage();
 		
 		
-		System.out.println("Envio mensaje");
+		System.out.println("Envio mensaje 1");
 		
 		sesionB.sendMessage(a);
 		
-			
-		}).start();
 		
 		new Thread(() -> {
 			
-		String b = sesionB.readMessage();
-		
-		System.out.println("Envio mensaje");
-		sesionA.sendMessage(b);
+			String b = sesionB.readMessage();
+			
+			System.out.println("Envio mensaje 2");
+			sesionA.sendMessage(b);
+				
+			}).start();
 			
 		}).start();
+		
+		
+		
+		new Thread(() -> {
+			
+			String b = sesionB.readMessage();
+			
+			System.out.println("Envio mensaje 3");
+			sesionA.sendMessage(b);
+			
+			new Thread(() -> {
+				
+				String a = sesionA.readMessage();
+				
+				
+				System.out.println("Envio mensaje 4");
+				
+				sesionB.sendMessage(a);
+				
+					
+			}).start();
+				
+			}).start();
 		
 		
 	}
