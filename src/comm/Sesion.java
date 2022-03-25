@@ -136,22 +136,34 @@ public class Sesion extends Thread{
 			String msg = br.readLine();
 			Gson gson = new Gson();
 			
+			msgfinal = msg;
 			
-			 
-			 
+			if(msgfinal!=null) {
 			
-			System.out.println(msg);
 			if(msg.equals("{\"type\":\"Message\",\"message\":\"gameEnded\"}")) {
-			
+				
 				 ended.gameEnded(this);
 				
+			} 
+			
+			}else {
+				
+				
+				close.OnSesionClosed(this);
+				
+				
 			}
+			
+			System.out.println(msg);
+			
 			 while(msg==null || msg.isEmpty() ) {
 				 
 				 if(msg==null) {
 					 
 					 close.OnSesionClosed(this);
 				 }else{
+					 
+					 
 					 
 					 Generic generic = gson.fromJson(msg, Generic.class);
 					 System.out.println("Entro al else");
@@ -174,7 +186,7 @@ public class Sesion extends Thread{
 					 }
 					 
 				 }
-                 System.out.println("Espera en el readLine");
+                System.out.println("Espera en el readLine");
                  msg = br.readLine();
 
                  //windows0.msgMain=msg;
@@ -182,12 +194,15 @@ public class Sesion extends Thread{
 
              }
 			msgfinal = received.messageReceived(msg,this);
+			//Thread.currentThread().interrupt();
 			} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
 			}
 		return msgfinal;
+		
+		
 		}
 
 	public synchronized void setClose(OnClose close) {

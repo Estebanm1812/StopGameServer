@@ -50,26 +50,9 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 					
 					Sesion session = new Sesion(socket,app);
 					
-					if(session==null) {
-						System.out.println("la sesion es nula");
-					}
+					addTheNewSesion(session);
 					
-					session.setReceived(app);
-					session.setEnded(this);
 					
-					session.start();	
-					
-					sessions.add(session);
-					
-					new Thread(() -> {
-					
-					if(sessions.size()%2==0) {
-						
-					createGame();
-					
-					}
-					
-					}).start();
 				}
 				
 			}catch (IOException e) {
@@ -82,11 +65,11 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 	
 	public void createGame() {
 		
-		System.out.println("Entro");
+		//System.out.println("Entro");
 		
 		new Thread(() -> {
 				
-			System.out.println("En este momento hay: " + sessions.size() + " jugadores");
+			//System.out.println("En este momento hay: " + sessions.size() + " jugadores");
 				
 				Sesion sesionA = null;
 				
@@ -119,13 +102,13 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 				out = false;
 				
 				
-				System.out.println("Va a entrar al segundo for");
+				//System.out.println("Va a entrar al segundo for");
 				
 				for(int i=0; i < sessions.size() && out==false;i++) {
 					
 					Sesion tmp = sessions.get(i);
 					
-					System.out.println(tmp.getName());
+					//System.out.println(tmp.getName());
 					
 					System.out.println("Esta en el index " + i);
 					if(tmp.isOnGame()==false) {
@@ -202,19 +185,19 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 		String a = sesionA.readMessage();
 		
 		
-		System.out.println("Envio mensaje 1");
+		//System.out.println("Envio mensaje 1");
 		
 		sesionB.sendMessage(a);
 		
 		
-		new Thread(() -> {
+		//new Thread(() -> {
 			
 			String b = sesionB.readMessage();
 			
-			System.out.println("Envio mensaje 2");
+			//System.out.println("Envio mensaje 2");
 			sesionA.sendMessage(b);
 				
-			}).start();
+			//}).start();
 		
 		sesionA.readMessage();
 			
@@ -226,20 +209,21 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 			
 			String b = sesionB.readMessage();
 			
-			System.out.println("Envio mensaje 3");
+			//System.out.println("Envio mensaje 3");
 			sesionA.sendMessage(b);
 			
-			new Thread(() -> {
+			//new Thread(() -> {
 				
 				String a = sesionA.readMessage();
 				
 				
-				System.out.println("Envio mensaje 4");
+				//System.out.println("Envio mensaje 4");
 				
 				sesionB.sendMessage(a);
 				
 					
-			}).start();
+			//}).start();
+				
 		sesionB.readMessage();	
 				
 			}).start();
@@ -279,10 +263,13 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 			
 			if(sessions.get(i).equals(sesion)) {
 			
-				//sessions.get(i).setOnGame(false);
+				sessions.get(i).setOnGame(false);
 				sessions.remove(i);
+			
 				out = true;
-				System.out.println("Cambio de estado, ahora es: " + sessions.get(i).isOnGame() );
+				//System.out.println("Cambio de estado, ahora es: " + sessions.get(i).isOnGame() );
+				
+				addTheNewSesion(sesion);
 				
 			}
 			
@@ -290,6 +277,47 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 		createGame();
 		
 		
-	}	
+	}
+	
+	
+	
+	public synchronized void addTheNewSesion(Sesion sesion){
+		
+		sesion.setReceived(app);
+		sesion.setEnded(this);
+		sesion.setClose(this);
+		
+		sesion.start();	
+		
+		System.out.println(sessions.size() + " Antes del Add" );
+		
+		sessions.add(sesion);
+		
+		System.out.println(sessions.size() + " Despues del Add" );
+		
+		new Thread(() -> {
+		
+		int count = 0;	
+			
+		for(int i = 0; i < sessions.size();i++) {
+		
+			Sesion tmp = sessions.get(i);
+			
+			if(tmp.isOnGame()==false) {
+				
+				count++;
+			}
+			
+			
+		}	
+		if(count%2==0) {
+			
+		createGame();
+		
+		}
+		
+		}).start();
+		
+	}
 	
 }
