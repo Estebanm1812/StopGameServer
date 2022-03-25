@@ -14,7 +14,7 @@ import model.Message;
 import events.OnClose;
 import events.OnGameEnded;
 import events.OnMessageReceived;
-
+import events.OnPlayerLeaving;
 import main.Main;
 import model.Generic;
 
@@ -37,6 +37,10 @@ public class Sesion extends Thread{
 	private OnGameEnded ended;
 	
 	private OnMessageReceived received;
+	
+	private OnPlayerLeaving leaving;
+	
+	private boolean alreadyWorking;
 	//private OnMessageSend send;
 
 	public Sesion(Socket socket, Main main) {
@@ -50,6 +54,8 @@ public class Sesion extends Thread{
 		setReceived(main);
 		
 		onGame = false;
+		
+		setAlreadyWorking(false);
 		//main.setReceivd(this);
 	}
 	
@@ -97,7 +103,7 @@ public class Sesion extends Thread{
 				//send.messageSend(line);
 				bw.write(line + "\n");
 				
-				System.out.println(line);
+				//System.out.println(line);
 				bw.flush();
 	
 			} catch (IOException e) {
@@ -129,7 +135,7 @@ public class Sesion extends Thread{
 		this.onGame = onGame;
 	}
 	
-	public String readMessage() {
+	public synchronized String readMessage() {
 		
 		String msgfinal = " ";
 		try {
@@ -144,6 +150,10 @@ public class Sesion extends Thread{
 				
 				 ended.gameEnded(this);
 				
+			}else if(msg.equals("{\"type\":\"Message\",\"message\":\"leave\"}")) {
+				
+				leaving.playerleaving(this);
+				
 			} 
 			
 			}else {
@@ -154,19 +164,20 @@ public class Sesion extends Thread{
 				
 			}
 			
-			System.out.println(msg);
+			//System.out.println(msg);
 			
 			 while(msg==null || msg.isEmpty() ) {
 				 
 				 if(msg==null) {
 					 
 					 close.OnSesionClosed(this);
-				 }else{
 					 
+				 }
 					 
+					 /*
 					 
 					 Generic generic = gson.fromJson(msg, Generic.class);
-					 System.out.println("Entro al else");
+					 //System.out.println("Entro al else");
 					 
 					 switch(generic.type) {
 					 
@@ -184,9 +195,9 @@ public class Sesion extends Thread{
 					break;	 
 					 
 					 }
-					 
-				 }
-                System.out.println("Espera en el readLine");
+					 */
+				 
+                //System.out.println("Espera en el readLine");
                  msg = br.readLine();
 
                  //windows0.msgMain=msg;
@@ -215,6 +226,22 @@ public class Sesion extends Thread{
 
 	public void setEnded(OnGameEnded ended) {
 		this.ended = ended;
+	}
+
+	public boolean isAlreadyWorking() {
+		return alreadyWorking;
+	}
+
+	public void setAlreadyWorking(boolean alreadyWorking) {
+		this.alreadyWorking = alreadyWorking;
+	}
+
+	public OnPlayerLeaving getLeaving() {
+		return leaving;
+	}
+
+	public void setLeaving(OnPlayerLeaving leaving) {
+		this.leaving = leaving;
 	}
 		
 		

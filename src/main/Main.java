@@ -12,10 +12,11 @@ import comm.Sesion;
 import events.OnClose;
 import events.OnGameEnded;
 import events.OnMessageReceived;
+import events.OnPlayerLeaving;
 import model.Generic;
 import model.Message;
 
-public class Main implements OnMessageReceived, OnClose, OnGameEnded{
+public class Main implements OnMessageReceived, OnClose, OnGameEnded, OnPlayerLeaving{
 	
 	static Main app;
 	
@@ -75,9 +76,9 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 				
 				Sesion sesionB = null;
 				
-				System.out.println("Va a entrar al for");
+				//System.out.println("Va a entrar al for");
 				
-				System.out.println(sessions.size() + " Cantidad de jugadores");
+				//System.out.println(sessions.size() + " Cantidad de jugadores");
 				
 				boolean out = false;
 				
@@ -269,12 +270,14 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 				out = true;
 				//System.out.println("Cambio de estado, ahora es: " + sessions.get(i).isOnGame() );
 				
+				System.out.println(i);
+				
 				addTheNewSesion(sesion);
 				
 			}
 			
 		}
-		createGame();
+		//createGame();
 		
 		
 	}
@@ -287,7 +290,16 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 		sesion.setEnded(this);
 		sesion.setClose(this);
 		
-		sesion.start();	
+		if(sesion.isAlreadyWorking()==true) {
+			
+		}else {
+		
+			sesion.start();	
+
+		}
+		
+				
+		sesion.setAlreadyWorking(true);
 		
 		System.out.println(sessions.size() + " Antes del Add" );
 		
@@ -317,6 +329,31 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded{
 		}
 		
 		}).start();
+		
+	}
+
+	@Override
+	public void playerleaving(Sesion sesion) {
+		// TODO Auto-generated method stub
+		boolean out = false;
+		
+		for(int i=0; i < sessions.size() && out == false;i++) {
+			
+			if(sessions.get(i).equals(sesion)) {
+			
+				sessions.get(i).setOnGame(false);
+				sessions.remove(i);
+			
+				out = true;
+				//System.out.println("Cambio de estado, ahora es: " + sessions.get(i).isOnGame() );
+				
+				System.out.println(i);
+				
+				addTheNewSesion(sesion);
+				
+			}
+			
+		}
 		
 	}
 	
