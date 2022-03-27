@@ -19,7 +19,9 @@ import main.Main;
 import model.Generic;
 
 public class Sesion extends Thread{
-
+	
+	private Message playerinfo;
+	
 	private Socket socket;
 	
 	private String id;
@@ -138,6 +140,11 @@ public class Sesion extends Thread{
 	public synchronized String readMessage() {
 		
 		String msgfinal = " ";
+		
+		//String msgCouldUse = " ";
+		
+		System.out.println("Esta Esperando un Mensaje");
+		
 		try {
 			String msg = br.readLine();
 			Gson gson = new Gson();
@@ -146,22 +153,36 @@ public class Sesion extends Thread{
 			
 			if(msgfinal!=null) {
 			
-			if(msg.equals("{\"type\":\"Message\",\"message\":\"gameEnded\"}")) {
+			if(msgfinal.startsWith("{")) {	
 				
-				 ended.gameEnded(this);
+				Generic generic = gson.fromJson(msgfinal, Generic.class);
 				
-			}else if(msg.equals("{\"type\":\"Message\",\"message\":\"leave\"}")) {
 				
-				leaving.playerleaving(this);
+				if(generic.type.equals("Message")) {
 				
-			} 
+					
+					Message msg2 = gson.fromJson(msgfinal, Message.class); 
+					
+					if(msg2.getMessageText().equals("gameEnded")) {
+				
+						ended.gameEnded(this);
+				
+					}else if(msg2.getMessageText().equals("leave")) {
+				
+						leaving.playerleaving(this);
+				
+					} 
 			
-			}else {
+				}
+			}	
 				
 				
+				
+				
+			}else{
+				
+				System.out.println("deberia entrar a aqui");
 				close.OnSesionClosed(this);
-				
-				
 			}
 			
 			//System.out.println(msg);
@@ -170,7 +191,7 @@ public class Sesion extends Thread{
 				 
 				 if(msg==null) {
 					 
-					 close.OnSesionClosed(this);
+					 //leaving.playerleaving(this);
 					 
 				 }
 					 
@@ -198,12 +219,15 @@ public class Sesion extends Thread{
 					 */
 				 
                 //System.out.println("Espera en el readLine");
-                 msg = br.readLine();
+                 //msg = br.readLine();
 
                  //windows0.msgMain=msg;
 
 
              }
+			System.out.println(msgfinal + " Este mensaje es del metodo readMessage"); 
+			
+			
 			msgfinal = received.messageReceived(msg,this);
 			//Thread.currentThread().interrupt();
 			} catch (IOException e) {
