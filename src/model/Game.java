@@ -8,7 +8,7 @@ import comm.Sesion;
 
 public class Game {
 
-	private static int state;
+	private static  int state;
 	
 	private Sesion sesionA;
 	
@@ -62,37 +62,44 @@ public class Game {
 		String aEnded = " ";
 		
 		String bEnded = " ";
+		
+		int test = 0;
+		
 		Thread aWaiting = new Thread() {
 		
 			public void run() {
 			
 		String a = sesionA.readMessage();
+			
 		
-			if(aEnded.contains("Answer")) {
-				
-				state = 1;
+		
+			System.out.println("Esto es antes del if");
+			if(aEnded.contains("Answer")==true) {
+				System.out.println("Entro al if dentro del hilo A");
+				state += 1;
+				System.out.println(state);
+
 			}
-		
-		//System.out.println("Envio mensaje 1");
 		
 		sesionB.sendMessage(a);
 		
 		
 		//new Thread(() -> {
 			
-			String b = sesionB.readMessage();
+			//String b = sesionB.readMessage();
 			
-			//System.out.println("Envio mensaje 2");
-			sesionA.sendMessage(b);
-			//sesionB.sendMessage("");
 			
-			//}).start();
+			//sesionA.sendMessage(b);
+			
 		
-			
+		
+		
 		System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
 		sesionA.readMessage();
-		//sesionB.readMessage();
-			
+		System.out.println("La Pantalla b espera su mensaje");
+		sesionB.readMessage();
+		
+		sesionA.readMessage();
 			}
 		};
 		
@@ -102,15 +109,25 @@ public class Game {
 			public void run() {
 			
 		String b = sesionB.readMessage();
-		
-			if(bEnded.contains("Answer")) {
+			
+			
+			
+			if(bEnded.contains("Answer")==true) {
 				
-				state = 2;
+				System.out.println("Entro al if dentro del hilo B");
+
+				state += 2;
+				
+				System.out.println(state);
+
 			}
+			
+			
 		
 		//System.out.println("Envio mensaje 1");
 		
-		sesionA.sendMessage(b);
+		//sesionA.sendMessage(b);
+		
 		
 		
 		//new Thread(() -> {
@@ -126,12 +143,23 @@ public class Game {
 			
 		System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
 		sesionA.readMessage();
+		System.out.println("La Pantalla A espera su mensaje");
+
 		sesionB.readMessage();
 			
+		sesionB.readMessage();
 			}
 		};
 		aWaiting.start();
 		bWaiting.start();
+		
+		/*
+		while(aWaiting.isAlive()==true || bWaiting.isAlive()==true) {
+			
+			System.out.println("Tiene que dar vueltas aqui");
+		}
+		*/
+		/*
 		
 		while(state==0) {
 			//System.out.println("Esta dando vueltas en el while");
@@ -147,7 +175,7 @@ public class Game {
 			}
 			
 		}
-		
+		*/
 		
 		
 	}

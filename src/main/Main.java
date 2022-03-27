@@ -153,6 +153,8 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded, OnPlayerLe
 	
 	public void startGame(Sesion sesionA,Sesion sesionB) {
 		
+		System.out.println("No deberia entrar aqui");
+		
 		Message msg = new Message("sendPlayer");
 		
 		Gson gson = new Gson();
