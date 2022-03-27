@@ -150,7 +150,7 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded, OnPlayerLe
 	}
 	
 	//Este metodo se podria quitar si funciona
-	
+	/*
 	public void startGame(Sesion sesionA,Sesion sesionB) {
 		
 		System.out.println("No deberia entrar aqui");
@@ -176,7 +176,7 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded, OnPlayerLe
 		Random r = new Random();
 		char c = (char)(r.nextInt(26) + 'a');
 		
-		System.out.println(c + " esta letra va a enviar");
+		//System.out.println(c + " esta letra va a enviar");
 		
 		//System.out.println(playerA);
 		
@@ -253,7 +253,7 @@ public class Main implements OnMessageReceived, OnClose, OnGameEnded, OnPlayerLe
 		
 	}
 		
-	
+	*/
 
 	@Override
 	public String messageReceived(String msg, Sesion sessions) {

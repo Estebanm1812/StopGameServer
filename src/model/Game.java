@@ -72,7 +72,10 @@ import comm.Sesion;
 					if(a.contains("Answer")) {
 						//System.out.println("Entra en el if");
 						bWaiting.interrupt();
+						//bWaiting.stop();
 						state = 1;
+						System.out.println("Este es el estado del hilo B " + bWaiting.isInterrupted());
+
 					}
 		
 		//System.out.println("Envio mensaje 1");
@@ -94,7 +97,7 @@ import comm.Sesion;
 		//System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
 		//
 		//
-					
+					/*
 					new Thread(() -> {
 					
 						sesionA.readMessage();	
@@ -102,6 +105,7 @@ import comm.Sesion;
 						
 					}).start();	
 					
+					*/
 					new Thread(() -> {
 					
 						sesionB.readMessage();
@@ -126,7 +130,12 @@ import comm.Sesion;
 				if(b.contains("Answer")) {
 					//System.out.println("Entra en el if");
 					state = 2;
+					
 					aWaiting.interrupt();
+					//aWaiting.stop();
+					//aWaiting.stop();
+					System.out.println("Este es el estado del hilo A " + aWaiting.isInterrupted());
+					
 				}
 		
 		//System.out.println("Envio mensaje 1");
@@ -157,13 +166,15 @@ import comm.Sesion;
 					
 				}).start();	
 				
+				/*
 				new Thread(() -> {
 				
 					sesionB.readMessage();
 					
 				}).start();	
-				
+				*/
 				}
+				
 			}
 		};
 		aWaiting.start();

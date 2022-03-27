@@ -181,7 +181,7 @@ public class Sesion extends Thread{
 				
 			}else{
 				
-				System.out.println("deberia entrar a aqui");
+				//System.out.println("deberia entrar a aqui");
 				close.OnSesionClosed(this);
 			}
 			
@@ -225,7 +225,7 @@ public class Sesion extends Thread{
 
 
              }
-			System.out.println(msgfinal + " Este mensaje es del metodo readMessage"); 
+			//System.out.println(msgfinal + " Este mensaje es del metodo readMessage"); 
 			
 			
 			msgfinal = received.messageReceived(msg,this);
