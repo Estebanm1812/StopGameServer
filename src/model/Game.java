@@ -8,7 +8,7 @@ import comm.Sesion;
 
 public class Game {
 
-	private int state;
+	private static int state;
 	
 	private Sesion sesionA;
 	
@@ -134,7 +134,8 @@ public class Game {
 		bWaiting.start();
 		
 		while(state==0) {
-			
+			//System.out.println("Esta dando vueltas en el while");
+			//System.out.println(state);
 			if(state==1) {
 				System.out.println("El hilo B tendria que haberse detenido, B esta " + bWaiting.isAlive());
 				bWaiting.interrupt();
