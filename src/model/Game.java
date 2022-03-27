@@ -68,9 +68,9 @@ import comm.Sesion;
 				synchronized(this) {
 					String a = sesionA.readMessage();
 			
-					System.out.println("Este mensaje deberia activar el if " + a);
+					//System.out.println("Este mensaje deberia activar el if " + a);
 					if(a.contains("Answer")) {
-						System.out.println("Entra en el if");
+						//System.out.println("Entra en el if");
 						bWaiting.interrupt();
 						state = 1;
 					}
@@ -91,9 +91,23 @@ import comm.Sesion;
 			//}).start();
 		
 			
-					System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
-		//sesionA.readMessage();
-		//sesionB.readMessage();
+		//System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
+		//
+		//
+					
+					new Thread(() -> {
+					
+						sesionA.readMessage();	
+						
+						
+					}).start();	
+					
+					new Thread(() -> {
+					
+						sesionB.readMessage();
+						
+					}).start();	
+					
 				}
 			}
 		};
@@ -107,10 +121,10 @@ import comm.Sesion;
 				
 				String b = sesionB.readMessage();
 			
-				System.out.println("Este mensaje deberia activar el if " + b);
+				//System.out.println("Este mensaje deberia activar el if " + b);
 
 				if(b.contains("Answer")) {
-					System.out.println("Entra en el if");
+					//System.out.println("Entra en el if");
 					state = 2;
 					aWaiting.interrupt();
 				}
@@ -131,9 +145,24 @@ import comm.Sesion;
 			//}).start();
 		
 			
-		System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
+		//System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
 		//sesionA.readMessage();
 		//sesionB.readMessage();
+				
+				
+				new Thread(() -> {
+					
+					sesionA.readMessage();	
+					
+					
+				}).start();	
+				
+				new Thread(() -> {
+				
+					sesionB.readMessage();
+					
+				}).start();	
+				
 				}
 			}
 		};
