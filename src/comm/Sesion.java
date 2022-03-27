@@ -137,7 +137,7 @@ public class Sesion extends Thread{
 		this.onGame = onGame;
 	}
 	
-	public synchronized String readMessage() {
+	public  String readMessage() {
 		
 		String msgfinal = " ";
 		

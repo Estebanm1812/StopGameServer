@@ -1,22 +1,20 @@
 package model;
-
 import java.util.Random;
-
 import com.google.gson.Gson;
-
 import comm.Sesion;
 
-public class Game {
+ public class Game {
 
-<<<<<<< HEAD
-	private static  int state;
-=======
-	private int state;
->>>>>>> parent of 127e410 (Program properly works)
-	
-	private Sesion sesionA;
-	
+ 	//private int state;
+ 	private static int state;
+
+ 	private Sesion sesionA;
+
 	private Sesion sesionB;
+	
+	private Thread aWaiting;
+	
+	private Thread bWaiting;
 	
 	public Game(Sesion sesionA, Sesion sesionB) {
 		
@@ -29,9 +27,8 @@ public class Game {
 		startGame();
 	}
 	
-	public void startGame() {
+	public synchronized void startGame() {
 		
-
 		Message msg = new Message("sendPlayer");
 		
 		Gson gson = new Gson();
@@ -63,118 +60,99 @@ public class Game {
 		
 		sesionB.sendMessage(playerA+"//"+c);
 		
-		String aEnded = " ";
 		
-		String bEnded = " ";
-		
-		int test = 0;
-		
-		Thread aWaiting = new Thread() {
+		aWaiting = new Thread() {
 		
 			public void run() {
 			
-		String a = sesionA.readMessage();
+				synchronized(this) {
+					String a = sesionA.readMessage();
 			
+					System.out.println("Este mensaje deberia activar el if " + a);
+					if(a.contains("Answer")) {
+						System.out.println("Entra en el if");
+						bWaiting.interrupt();
+						state = 1;
+					}
 		
+		//System.out.println("Envio mensaje 1");
 		
-			System.out.println("Esto es antes del if");
-			if(aEnded.contains("Answer")==true) {
-				System.out.println("Entro al if dentro del hilo A");
-				state += 1;
-				System.out.println(state);
-
-			}
-		
-		sesionB.sendMessage(a);
+					sesionB.sendMessage(a);
 		
 		
 		//new Thread(() -> {
 			
-			//String b = sesionB.readMessage();
+					String b = sesionB.readMessage();
 			
+			//System.out.println("Envio mensaje 2");
+					sesionA.sendMessage(b);
+			//sesionB.sendMessage("");
 			
-			//sesionA.sendMessage(b);
+			//}).start();
+		
 			
-		
-		
-		
-		System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
-		sesionA.readMessage();
-		System.out.println("La Pantalla b espera su mensaje");
-		sesionB.readMessage();
-		
-		sesionA.readMessage();
+					System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
+		//sesionA.readMessage();
+		//sesionB.readMessage();
+				}
 			}
 		};
 		
 		
-		Thread bWaiting = new Thread() {
+		bWaiting = new Thread() {
 			
 			public void run() {
 			
-		String b = sesionB.readMessage();
-			
-			
-			
-			if(bEnded.contains("Answer")==true) {
+				synchronized(this) {
 				
-				System.out.println("Entro al if dentro del hilo B");
-
-				state += 2;
-				
-				System.out.println(state);
-
-			}
+				String b = sesionB.readMessage();
 			
-			
+				System.out.println("Este mensaje deberia activar el if " + b);
+
+				if(b.contains("Answer")) {
+					System.out.println("Entra en el if");
+					state = 2;
+					aWaiting.interrupt();
+				}
 		
 		//System.out.println("Envio mensaje 1");
 		
-		//sesionA.sendMessage(b);
-		
+				sesionA.sendMessage(b);
 		
 		
 		//new Thread(() -> {
 		
-			String a = sesionA.readMessage();
+				String a = sesionA.readMessage();
 			
 			//System.out.println("Envio mensaje 2");
-			sesionB.sendMessage(a);
+				sesionB.sendMessage(a);
 			//sesionB.sendMessage("");
 			
 			//}).start();
 		
 			
 		System.out.println("En este sitio esta esperando la respuesta de la pantalla final");	
-		sesionA.readMessage();
-		System.out.println("La Pantalla A espera su mensaje");
-
-		sesionB.readMessage();
-			
-		sesionB.readMessage();
+		//sesionA.readMessage();
+		//sesionB.readMessage();
+				}
 			}
 		};
 		aWaiting.start();
-		bWaiting.start();
-		
-		/*
-		while(aWaiting.isAlive()==true || bWaiting.isAlive()==true) {
-			
-			System.out.println("Tiene que dar vueltas aqui");
-		}
-		*/
-		/*
-		
-		while(state==0) {
-			
-			if(state==1) {
-				System.out.println("El hilo B tendria que haberse detenido, B esta " + bWaiting.isAlive());
-				bWaiting.interrupt();
+ 		bWaiting.start();
+ 		
+ 		/*
+ 		
+ 		while(state==0) {
+
+ 			//System.out.println("Esta dando vueltas en el while");
+ 			//System.out.println(state);
+ 			if(state==1) {
+ 				System.out.println("El hilo B tendria que haberse detenido, B esta " + bWaiting.isAlive());
+ 				bWaiting.interrupt();
 				
 			}else if(state==2) {
 				aWaiting.interrupt();
 				System.out.println("El hilo A tendria que haberse detenido, A esta " + aWaiting.isAlive());
-
 			}
 			
 		}
@@ -182,27 +160,21 @@ public class Game {
 		
 		
 	}
-
 	public int getState() {
 		return state;
 	}
-
 	public void setState(int state) {
 		this.state = state;
 	}
-
 	public Sesion getSesionA() {
 		return sesionA;
 	}
-
 	public void setSesionA(Sesion sesionA) {
 		this.sesionA = sesionA;
 	}
-
 	public Sesion getSesionB() {
 		return sesionB;
 	}
-
 	public void setSesionB(Sesion sesionB) {
 		this.sesionB = sesionB;
 	}
