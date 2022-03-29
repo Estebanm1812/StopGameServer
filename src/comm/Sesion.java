@@ -128,7 +128,8 @@ public class Sesion extends Thread{
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
+	
 	public boolean isOnGame() {
 		return onGame;
 	}
